@@ -82,11 +82,14 @@ jobs:
               input: ("You are a CI/CD root cause analysis agent. Analyze the GitHub Actions build failure log below. Distinguish warnings from the actual failure. Identify the root cause and recommend a remediation. Be concise.\n\nBUILD LOG:\n" + $logs)
             }' > request.json
 
-          curl --fail-with-body https://api.openai.com/v1/responses \
+          curl https://api.openai.com/v1/responses \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer $OPENAI_API_KEY" \
             -d @request.json \
             -o response.json
+          
+          echo "OpenAI response:"
+          cat response.json  
 
           echo "LLM response:"
           jq -r '.output[]?.content[]? | select(.type == "output_text") | .text' response.json    
