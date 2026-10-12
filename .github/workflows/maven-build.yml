@@ -55,5 +55,13 @@ jobs:
           BUILD_JOB_ID=$(jq -r '.jobs[] | select(.name | startswith("build")) | select(.conclusion == "failure") | .id' jobs.json)
           echo "Failed Build Job ID: $BUILD_JOB_ID"
           
+          echo "Downloading failed build job logs..."
+          curl --fail-with-body -L -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GH_TOKEN" -H "X-GitHub-Api-Version: 2022-11-28" "https://api.github.com/repos/${{ github.repository }}/actions/jobs/$BUILD_JOB_ID/logs" -o build.log
+
+          echo "Build log downloaded:"
+          ls -lh build.log
+
+          echo "Build log type:"
+          file build.log
 
 
