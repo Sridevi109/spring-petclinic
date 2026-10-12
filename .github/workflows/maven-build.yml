@@ -63,5 +63,8 @@ jobs:
 
           echo "Build log type:"
           file build.log
+          echo "Last 100 lines of failed build log:"
+          tail -n 100 build.log
+          
 
 
